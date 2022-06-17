@@ -2,6 +2,8 @@
 #include <unordered_set>
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/ostr.h>
+#include <boost/algorithm/string.hpp>
+#include <boost/lexical_cast.hpp>
 
 namespace sg
 {
@@ -120,6 +122,16 @@ Pose Node::GetWorldPose() const
     return GetLocalPose();
 }
 
+void Node::SetUserData(const std::string &key, UserDataSPtr data) const
+{
+    m_user_data_map[key] = data;
+}
+
+UserDataSPtr Node::GetUserData(const std::string &key) const
+{
+    return m_user_data_map[key];
+}
+
 std::string &Node::PrintSceneGraph(std::string &description,
                                    std::size_t indent) const
 {
@@ -137,4 +149,51 @@ std::ostream &operator<<(std::ostream &out, const Node &node)
     out << "<Node " << node.GetName() << " at " << &node << "\n>";
     return out;
 }
+
+
+void to_json(json &j, const NodeSPtr &node)
+{
+    j = json{
+        {"name", node->GetName()},
+        {"local_pose", node->GetLocalPose()},
+        {"children", node->GetChildren()},
+    };
+}
+
+void from_json(const json &j, NodeSPtr &node)
+{
+    node->SetName(j.at("name").get<std::string>());
+    node->SetLocalPose(j.at("local_pose").get<Pose>());
+    auto n = j.at("children").size();
+    for (auto i = 0u; i < n; ++i) {
+        auto child = Node::Create();
+        j.at("children").at(i).get_to(child);
+        node->AddChild(child);
+    }
+}
 } // namespace sg
+
+namespace Eigen
+{
+void to_json(json &j, const Matrix4d &pose)
+{
+    j = fmt::format(
+        "{}", pose.format(Eigen::IOFormat(Eigen::FullPrecision, 0, ",", ",")));
+}
+
+void from_json(const json &j, Matrix4d &pose)
+{
+    auto str = j.get<std::string>();
+    std::vector<std::string> vec_str;
+    boost::algorithm::trim_if(str, boost::is_any_of(","));
+    boost::algorithm::split(vec_str, str, boost::is_any_of(","),
+                            boost::algorithm::token_compress_on);
+    std::vector<double> vec;
+    for (auto &s : vec_str) {
+        auto v = boost::lexical_cast<double>(s);
+        SPDLOG_DEBUG("parse string [{}] to {}", s, v);
+        vec.push_back(v);
+    }
+    pose = Eigen::Map<Matrix4d>(vec.data(), 4, 4);
+}
+} // namespace Eigen

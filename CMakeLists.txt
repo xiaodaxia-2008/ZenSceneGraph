@@ -34,7 +34,8 @@ endif()
 
 find_package(Eigen3 REQUIRED)
 
-add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_INFO)
+add_compile_definitions(SPDLOG_ACTIVE_LEVEL=SPDLOG_LEVEL_DEBUG)
 include_directories(Src)
+include_directories(ThirdParty)
 add_subdirectory(Src)
 add_subdirectory(Examples)
