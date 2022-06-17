@@ -57,6 +57,6 @@ int main()
     NodeSPtr root2 = Node::Create();
     j.get_to(root2);
     description.clear();
-    root2->PrintSceneGraph(description);
+    std::cout << root2->PrintSceneGraph(description);
     return 0;
 }

@@ -31,7 +31,8 @@ void Node::SetName(const std::string &name)
     if (auto &n = node_names[name]; n > 0) {
         m_name = name.empty() ? fmt::format("Node_{}", n)
                               : fmt::format("{}_{}", name, n);
-        ++n;
+        node_names[m_name] = 1;
+        node_names[name] += 1;
     }
     else {
         m_name = name.empty() ? "Node" : name;
@@ -162,7 +163,9 @@ void to_json(json &j, const NodeSPtr &node)
 
 void from_json(const json &j, NodeSPtr &node)
 {
-    node->SetName(j.at("name").get<std::string>());
+    ///@todo using SetName, then the name will be changed
+    // node->SetName(j.at("name").get<std::string>());
+    j.at("name").get_to(node->m_name);
     node->SetLocalPose(j.at("local_pose").get<Pose>());
     auto n = j.at("children").size();
     for (auto i = 0u; i < n; ++i) {
@@ -185,13 +188,12 @@ void from_json(const json &j, Matrix4d &pose)
 {
     auto str = j.get<std::string>();
     std::vector<std::string> vec_str;
-    boost::algorithm::trim_if(str, boost::is_any_of(","));
     boost::algorithm::split(vec_str, str, boost::is_any_of(","),
                             boost::algorithm::token_compress_on);
     std::vector<double> vec;
     for (auto &s : vec_str) {
+        boost::algorithm::trim_if(s, boost::is_any_of(" ,"));
         auto v = boost::lexical_cast<double>(s);
-        SPDLOG_DEBUG("parse string [{}] to {}", s, v);
         vec.push_back(v);
     }
     pose = Eigen::Map<Matrix4d>(vec.data(), 4, 4);

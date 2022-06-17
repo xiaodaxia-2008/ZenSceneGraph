@@ -38,8 +38,8 @@ using NodeWPtr = std::weak_ptr<Node>;
 
 class Node : public std::enable_shared_from_this<Node>
 {
-    friend void to_json(json &j, const Node &node);
-    friend void from_json(const json &j, Node &node);
+    friend void to_json(json &j, const NodeSPtr &node);
+    friend void from_json(const json &j, NodeSPtr &node);
 
 public:
     static NodeSPtr Create(const std::string &name = "");
