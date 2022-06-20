@@ -1,36 +1,36 @@
 {
     "name": "Root",
-    "local_pose": "1,0,0,0\n0,1,0,0\n0,0,1,0\n0,0,0,1",
+    "local_pose": "1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1",
     "children": [
         {
             "name": "Node",
-            "local_pose": "1,0,0,0\n0,1,0,0\n0,0,1,0\n0,0,0,1",
-            "children": []
+            "local_pose": "1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1",
+            "children": null
         },
         {
             "name": "Robot",
-            "local_pose": "    1,    0,    0,    1\n    0,    1,    0,0.534\n    0,    0,    1,  0.3\n    0,    0,    0,    1",
-            "children": []
+            "local_pose": "    1,    0,    0,    1,    0,    1,    0,0.534,    0,    0,    1,  0.3,    0,    0,    0,    1",
+            "children": null
         },
         {
             "name": "Robot_1",
-            "local_pose": "1,0,0,0\n0,1,0,0\n0,0,1,0\n0,0,0,1",
+            "local_pose": "1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1",
             "children": [
                 {
                     "name": "Tool",
-                    "local_pose": "1,0,0,0\n0,1,0,0\n0,0,1,0\n0,0,0,1",
-                    "children": []
+                    "local_pose": "1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1",
+                    "children": null
                 }
             ]
         },
         {
             "name": "Robot_2",
-            "local_pose": "    1,    0,    0,    1\n    0,    1,    0,0.534\n    0,    0,    1,  0.3\n    0,    0,    0,    1",
+            "local_pose": "    1,    0,    0,    1,    0,    1,    0,0.534,    0,    0,    1,  0.3,    0,    0,    0,    1",
             "children": [
                 {
                     "name": "Tool_1",
-                    "local_pose": "     1,     0,     0,    -1\n     0,     1,     0,-0.534\n     0,     0,     1,  -0.3\n     0,     0,     0,     1",
-                    "children": []
+                    "local_pose": "     1,     0,     0,    -1,     0,     1,     0,-0.534,     0,     0,     1,  -0.3,     0,     0,     0,     1",
+                    "children": null
                 }
             ]
         }

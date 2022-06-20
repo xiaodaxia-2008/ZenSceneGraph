@@ -38,8 +38,8 @@ using NodeWPtr = std::weak_ptr<Node>;
 
 class Node : public std::enable_shared_from_this<Node>
 {
-    friend void to_json(json &j, const NodeSPtr &node);
-    friend void from_json(const json &j, NodeSPtr &node);
+    friend void to_json(json &j, const Node &node);
+    friend void from_json(const json &j, Node &node);
 
 public:
     static NodeSPtr Create(const std::string &name = "");
@@ -80,8 +80,8 @@ protected:
     mutable std::unordered_map<std::string, UserDataSPtr> m_user_data_map;
 };
 
-void to_json(json &j, const NodeSPtr &node);
-void from_json(const json &j, NodeSPtr &node);
+void to_json(json &j, const Node &node);
+void from_json(const json &j, Node &node);
 
 std::ostream &operator<<(std::ostream &out, const Node &node);
 } // namespace sg

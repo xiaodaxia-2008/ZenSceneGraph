@@ -152,26 +152,30 @@ std::ostream &operator<<(std::ostream &out, const Node &node)
 }
 
 
-void to_json(json &j, const NodeSPtr &node)
+void to_json(json &j, const Node &node)
 {
     j = json{
-        {"name", node->GetName()},
-        {"local_pose", node->GetLocalPose()},
-        {"children", node->GetChildren()},
+        {"name", node.GetName()},
+        {"local_pose", node.GetLocalPose()},
     };
+    json children;
+    for (auto child : node.GetChildren()) {
+        children.push_back(*child);
+    }
+    j["children"] = children;
 }
 
-void from_json(const json &j, NodeSPtr &node)
+void from_json(const json &j, Node &node)
 {
     ///@todo using SetName, then the name will be changed
     // node->SetName(j.at("name").get<std::string>());
-    j.at("name").get_to(node->m_name);
-    node->SetLocalPose(j.at("local_pose").get<Pose>());
+    j.at("name").get_to(node.m_name);
+    j.at("local_pose").get_to(node.m_local_pose);
     auto n = j.at("children").size();
     for (auto i = 0u; i < n; ++i) {
         auto child = Node::Create();
-        j.at("children").at(i).get_to(child);
-        node->AddChild(child);
+        j.at("children").at(i).get_to(*child);
+        node.AddChild(child);
     }
 }
 } // namespace sg

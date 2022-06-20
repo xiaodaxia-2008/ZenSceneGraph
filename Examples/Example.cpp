@@ -52,10 +52,10 @@ int main()
                      ->some_data
               << std::endl;
 
-    json j = root;
+    json j = *root;
     std::cout << j << std::endl;
     NodeSPtr root2 = Node::Create();
-    j.get_to(root2);
+    j.get_to(*root2);
     description.clear();
     std::cout << root2->PrintSceneGraph(description);
     return 0;
